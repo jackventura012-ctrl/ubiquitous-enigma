@@ -1,117 +1,136 @@
-🃏 TRINITY DRAW 🎮
+import random
 
-A minimalist card game of balance, chance, and intuition
+def draw_card():
+    """Draw a random card from a standard deck (values only)."""
+    cards = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+    return random.choice(cards)
 
-Welcome to Trinity Draw — a fast-paced card duel where the goal isn’t to get the highest number, but the closest perfect balance. Every draw matters, and one extra card can either save you… or ruin everything.
+def card_value(card):
+    """Return the Trinity Draw value of a card."""
+    if card == "A":
+        return 1
+    elif card in ["10", "J", "Q", "K"]:
+        return 0
+    else:
+        return int(card)
 
-🧠 Game Overview
+def hand_value(hand):
+    """Calculate total hand value using mod 10 rule."""
+    total = sum(card_value(card) for card in hand)
+    return total % 10
 
-Trinity Draw is a turn-based card game inspired by point-based casino games, where players compete to reach an optimal total without knowing exactly when to stop. Unlike traditional card games, both sides operate under strict limits that force risky decisions.
+def player_turn(hand):
+    """Handle the player's optional third card decision."""
+    value = hand_value(hand)
+    print(f"\nYour hand: {hand} | Value: {value}")
 
-You face the House (the bot). Each round plays out in seconds, but the consequences can last much longer.
+    if value <= 5:
+        while True:
+            choice = input("Draw a third card? (y/n): ").lower()
+            if choice == "y":
+                card = draw_card()
+                hand.append(card)
+                print(f"You drew: {card}")
+                break
+            elif choice == "n":
+                print("You chose to stand.")
+                break
+            else:
+                print("Invalid input. Please enter y or n.")
+    else:
+        print("You must stand (value is above 5).")
 
-🎯 Objective
+    return hand
 
-Get closer to the Target Value (9) than the House without exceeding it.
+def house_turn(hand):
+    """House draws automatically based on fixed rules."""
+    value = hand_value(hand)
+    print(f"\nHouse hand: {hand} | Value: {value}")
 
-Go over the target, and you instantly lose the round — no second chances.
+    if value <= 5:
+        card = draw_card()
+        hand.append(card)
+        print(f"House draws a card.")
+    else:
+        print("House stands.")
 
-🔑 Core Rules & Mechanics
+    return hand
 
-🃏 Card Values
+def determine_winner(player_hand, house_hand):
+    """Determine the round winner."""
+    player_value = hand_value(player_hand)
+    house_value = hand_value(house_hand)
 
-Ace = 1
+    print("\n--- FINAL HANDS ---")
+    print(f"Your hand: {player_hand} | Value: {player_value}")
+    print(f"House hand: {house_hand} | Value: {house_value}")
 
-Cards 2–9 = face value
+    if player_value > 9:
+        return "house"
+    if house_value > 9:
+        return "player"
 
-10, J, Q, K = 0
+    if player_value > house_value:
+        return "player"
+    elif player_value < house_value:
+        return "house"
+    else:
+        return "tie"
 
-🎯 Target Value
+def main():
+    player_lives = 5
+    house_lives = 5
+    round_number = 1
 
-The target number is 9
+    print("\n🃏 WELCOME TO TRINITY DRAW 🃏")
+    print("Reach the closest value to 9 without going over.\n")
 
-Only the last digit of your total counts (mod 10 rule)
+    while player_lives > 0 and house_lives > 0:
+        print(f"\n=== ROUND {round_number} ===")
+        print(f"Your Lives: {player_lives} | House Lives: {house_lives}")
 
-🃏 Initial Draw
+        # Initial deal
+        player_hand = [draw_card(), draw_card()]
+        house_hand = [draw_card(), draw_card()]
 
-You and the House are dealt 2 cards
+        # Player and house turns
+        player_hand = player_turn(player_hand)
+        house_hand = house_turn(house_hand)
 
-Totals are calculated immediately
+        # Determine winner
+        result = determine_winner(player_hand, house_hand)
 
-➕ Third Card Option
+        if result == "player":
+            print("\n🎉 You win the round!")
+            house_lives -= 1
+        elif result == "house":
+            print("\n💀 House wins the round.")
+            player_lives -= 1
+        else:
+            print("\n⚖ It's a tie. No lives lost.")
 
-If your total is 5 or below, you may choose to draw one additional card
+        # Exit option
+        while True:
+            exit_choice = input("\nContinue playing? (y/n): ").lower()
+            if exit_choice in ["y", "n"]:
+                break
+            print("Invalid choice.")
 
-The House follows its own fixed draw rules
+        if exit_choice == "n":
+            print("\nYou chose to leave the table.")
+            break
 
-⚖ Winning the Round
+        round_number += 1
 
-Closest total to 9 wins
+    # Game over
+    print("\n🏁 GAME OVER")
+    if player_lives > house_lives:
+        print("🏆 You outlasted the House!")
+    elif player_lives < house_lives:
+        print("💀 The House claims victory.")
+    else:
+        print("⚖ The game ends in balance.")
 
-Equal totals = tie
 
-Exceeding 9 = automatic loss
-
-❤️ Life System
-
-Both players start with 5 lives
-
-Losing a round = lose 1 life
-
-First to reach zero lives loses the game
-
-🛑 Exit Anytime
-
-You may leave between rounds
-
-Exiting ends the game without a winner
-
-🕹️ How to Play
-1️⃣ Deal Phase
-
-Two cards are dealt to both you and the House.
-
-2️⃣ Decision Phase
-
-If eligible, decide whether to draw a third card or stand.
-
-3️⃣ House Phase
-
-The House draws or stands based on predefined rules.
-
-4️⃣ Reveal Phase
-
-Totals are compared and lives are adjusted.
-
-5️⃣ Continue or Exit
-
-Proceed to the next round or walk away.
-
-🧩 Why It’s Like Baccarat (But Original)
-
-✔ Simple rules
-✔ Low player input, high tension
-✔ Fixed target number
-✔ Fast rounds
-
-✨ Original twists:
-
-Life-based progression
-
-Player choice on third card
-
-No betting system
-
-Survival instead of money
-
-🏁 Final Thoughts
-
-In Trinity Draw, patience is power.
-Drawing one more card could bring you closer to perfection—or end the game instantly.
-
-Know when to stop.
-
-👤 Creator
-
-Trinity Draw
-Created by Jack Layne Ventura
+if __name__ == "__main__":
+    main()
