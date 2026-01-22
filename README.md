@@ -1,126 +1,117 @@
-import random
-import time
+🃏 TRINITY DRAW 🎮
 
-def roll_dice():
-    return random.randint(1, 6)
+A minimalist card game of balance, chance, and intuition
 
-def dice_animation():
-    print("""
-      _______
-     |       |
-     |   o   |
-     |       |
-      ‾‾‾‾‾‾‾
-    """)
-    time.sleep(0.8)
+Welcome to Trinity Draw — a fast-paced card duel where the goal isn’t to get the highest number, but the closest perfect balance. Every draw matters, and one extra card can either save you… or ruin everything.
 
-def fate_trial(target):
-    events = ["curse", "blessing", "gamble"]
-    event = random.choice(events)
+🧠 Game Overview
 
-    print(f"\n⚖ Fate Trial begins for {target}...")
-    time.sleep(1)
+Trinity Draw is a turn-based card game inspired by point-based casino games, where players compete to reach an optimal total without knowing exactly when to stop. Unlike traditional card games, both sides operate under strict limits that force risky decisions.
 
-    if event == "curse":
-        print("💀 A dark curse strikes!")
-        return -1
+You face the House (the bot). Each round plays out in seconds, but the consequences can last much longer.
 
-    elif event == "blessing":
-        print("✨ A divine blessing is granted!")
-        return 1
+🎯 Objective
 
-    else:
-        print("🎲 A risky gamble appears!")
-        choice = input("Do you accept the gamble? (y/n): ").lower()
-        if choice == "y":
-            outcome = random.choice([-2, 2])
-            print("The gamble is cast...")
-            time.sleep(1)
-            return outcome
-        else:
-            print("You avoided the gamble.")
-            return 0
+Get closer to the Target Value (9) than the House without exceeding it.
 
-def dice_duel():
-    print("\n🎲 Rolling the Dice of Destiny...\n")
-    dice_animation()
+Go over the target, and you instantly lose the round — no second chances.
 
-    player_rolls = [roll_dice(), roll_dice()]
-    bot_rolls = [roll_dice(), roll_dice()]
+🔑 Core Rules & Mechanics
 
-    print(f"Your rolls: {player_rolls}")
-    print(f"Bot rolls: {bot_rolls}")
+🃏 Card Values
 
-    while True:
-        try:
-            choice = input("Choose a roll to keep (1 or 2): ")
-            if choice in ["1", "2"]:
-                player_final = player_rolls[int(choice) - 1]
-                break
-            else:
-                print("Invalid choice.")
-        except:
-            print("Error. Try again.")
+Ace = 1
 
-    bot_final = random.choice(bot_rolls)
+Cards 2–9 = face value
 
-    print(f"\nYou chose: {player_final}")
-    print(f"Bot chose: {bot_final}")
+10, J, Q, K = 0
 
-    if player_final > bot_final:
-        return "player"
-    elif player_final < bot_final:
-        return "bot"
-    else:
-        return "tie"
+🎯 Target Value
 
-def main_game():
-    player_life = 3
-    bot_life = 3
-    round_num = 1
+The target number is 9
 
-    print("\n🌌 Welcome to DICE OF DESTINY 🌌")
+Only the last digit of your total counts (mod 10 rule)
 
-    while player_life > 0 and bot_life > 0:
-        print(f"\n=== Round {round_num} ===")
-        print(f"Your Life: {player_life} | Bot Life: {bot_life}")
+🃏 Initial Draw
 
-        result = dice_duel()
+You and the House are dealt 2 cards
 
-        if result == "tie":
-            print("⚔ It's a tie! Fate spares both sides.")
+Totals are calculated immediately
 
-        elif result == "player":
-            print("🏆 You win the duel! Bot faces fate.")
-            bot_life += fate_trial("Bot")
+➕ Third Card Option
 
-        else:
-            print("💥 You lost the duel! You face fate.")
-            player_life += fate_trial("You")
+If your total is 5 or below, you may choose to draw one additional card
 
-        player_life = max(player_life, 0)
-        bot_life = max(bot_life, 0)
+The House follows its own fixed draw rules
 
-        while True:
-            exit_choice = input("\nContinue the trial? (y/n): ").lower()
-            if exit_choice in ["y", "n"]:
-                break
-            print("Invalid input.")
+⚖ Winning the Round
 
-        if exit_choice == "n":
-            print("You walk away from destiny...")
-            break
+Closest total to 9 wins
 
-        round_num += 1
+Equal totals = tie
 
-    print("\n🏁 GAME OVER")
-    if player_life > bot_life:
-        print("✨ You conquered fate itself!")
-    elif player_life < bot_life:
-        print("💀 Fate was not on your side.")
-    else:
-        print("⚖ Destiny remains balanced.")
+Exceeding 9 = automatic loss
 
-if __name__ == "__main__":
-    main_game()
-# ubiquitous-enigma
+❤️ Life System
+
+Both players start with 5 lives
+
+Losing a round = lose 1 life
+
+First to reach zero lives loses the game
+
+🛑 Exit Anytime
+
+You may leave between rounds
+
+Exiting ends the game without a winner
+
+🕹️ How to Play
+1️⃣ Deal Phase
+
+Two cards are dealt to both you and the House.
+
+2️⃣ Decision Phase
+
+If eligible, decide whether to draw a third card or stand.
+
+3️⃣ House Phase
+
+The House draws or stands based on predefined rules.
+
+4️⃣ Reveal Phase
+
+Totals are compared and lives are adjusted.
+
+5️⃣ Continue or Exit
+
+Proceed to the next round or walk away.
+
+🧩 Why It’s Like Baccarat (But Original)
+
+✔ Simple rules
+✔ Low player input, high tension
+✔ Fixed target number
+✔ Fast rounds
+
+✨ Original twists:
+
+Life-based progression
+
+Player choice on third card
+
+No betting system
+
+Survival instead of money
+
+🏁 Final Thoughts
+
+In Trinity Draw, patience is power.
+Drawing one more card could bring you closer to perfection—or end the game instantly.
+
+Know when to stop.
+
+👤 Creator
+
+Trinity Draw
+Created by Jack Layne Ventura
